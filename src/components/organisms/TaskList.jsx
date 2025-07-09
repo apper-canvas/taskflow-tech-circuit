@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import TaskCard from "@/components/molecules/TaskCard";
-import Empty from "@/components/ui/Empty";
+import { AnimatePresence, motion } from "framer-motion";
 import ApperIcon from "@/components/ApperIcon";
+import Empty from "@/components/ui/Empty";
+import TaskCard from "@/components/molecules/TaskCard";
 
 const TaskList = ({ tasks, onToggleComplete, onEdit, onDelete, selectedCategory }) => {
   const [sortBy, setSortBy] = useState("dueDate");
@@ -13,7 +13,7 @@ const TaskList = ({ tasks, onToggleComplete, onEdit, onDelete, selectedCategory 
     return task.category === selectedCategory;
   });
 
-  const sortedTasks = [...filteredTasks].sort((a, b) => {
+const sortedTasks = [...filteredTasks].sort((a, b) => {
     let aValue, bValue;
     
     switch (sortBy) {
@@ -21,11 +21,12 @@ const TaskList = ({ tasks, onToggleComplete, onEdit, onDelete, selectedCategory 
         aValue = new Date(a.dueDate);
         bValue = new Date(b.dueDate);
         break;
-      case "priority":
+      case "priority": {
         const priorityOrder = { "high": 3, "medium": 2, "low": 1 };
         aValue = priorityOrder[a.priority];
         bValue = priorityOrder[b.priority];
         break;
+      }
       case "title":
         aValue = a.title.toLowerCase();
         bValue = b.title.toLowerCase();
