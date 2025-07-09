@@ -136,6 +136,21 @@ class TaskService {
     return this.tasks.filter(task => 
       task.dueDate < today && !task.completed
     );
+}
+
+  async reorderTasks(reorderedTasks) {
+    await this.delay();
+    
+    // Update the order property for each task
+    reorderedTasks.forEach((task, index) => {
+      const taskIndex = this.tasks.findIndex(t => t.Id === task.Id);
+      if (taskIndex !== -1) {
+        this.tasks[taskIndex].order = index;
+      }
+    });
+    
+    this.saveTasks();
+    return true;
   }
 }
 

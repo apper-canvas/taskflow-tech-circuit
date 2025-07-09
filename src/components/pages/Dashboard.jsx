@@ -9,7 +9,7 @@ import Loading from "@/components/ui/Loading";
 import Error from "@/components/ui/Error";
 
 const Dashboard = () => {
-  const {
+const {
     tasks,
     categories,
     loading,
@@ -18,6 +18,7 @@ const Dashboard = () => {
     updateTask,
     deleteTask,
     toggleTaskComplete,
+    reorderTasks,
     refetch
   } = useTasks();
 
@@ -66,12 +67,13 @@ const Dashboard = () => {
             loading={loading}
           />
           
-          <TaskList
+<TaskList
             tasks={tasks}
             onToggleComplete={toggleTaskComplete}
             onEdit={handleEditTask}
             onDelete={handleDeleteTask}
             selectedCategory={selectedCategory}
+            onReorderTasks={reorderTasks}
           />
         </div>
       </div>

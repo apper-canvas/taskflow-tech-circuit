@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, Reorder } from "framer-motion";
 import ApperIcon from "@/components/ApperIcon";
 import Empty from "@/components/ui/Empty";
 import TaskCard from "@/components/molecules/TaskCard";
-
-const TaskList = ({ tasks, onToggleComplete, onEdit, onDelete, selectedCategory }) => {
+const TaskList = ({ tasks, onToggleComplete, onEdit, onDelete, selectedCategory, onReorderTasks }) => {
   const [sortBy, setSortBy] = useState("dueDate");
   const [sortOrder, setSortOrder] = useState("asc");
 
@@ -115,15 +114,29 @@ const sortedTasks = [...filteredTasks].sort((a, b) => {
             <ApperIcon name="Clock" className="w-5 h-5 text-purple-500" />
             Active Tasks ({activeTasks.length})
           </h3>
-          <div className="space-y-4">
+<Reorder.Group 
+            axis="y" 
+            values={activeTasks} 
+            onReorder={(reorderedTasks) => onReorderTasks(reorderedTasks, 'active')}
+            className="space-y-4"
+          >
             <AnimatePresence>
               {activeTasks.map((task) => (
-                <motion.div
+                <Reorder.Item
                   key={task.Id}
+                  value={task}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
                   transition={{ duration: 0.2 }}
+                  whileDrag={{ 
+                    scale: 1.05, 
+                    zIndex: 50,
+                    cursor: 'grabbing',
+                    boxShadow: '0 8px 25px rgba(0, 0, 0, 0.15)'
+                  }}
+                  dragConstraints={{ top: 0, bottom: 0 }}
+                  className="drag-item"
                 >
                   <TaskCard
                     task={task}
@@ -131,10 +144,10 @@ const sortedTasks = [...filteredTasks].sort((a, b) => {
                     onEdit={onEdit}
                     onDelete={onDelete}
                   />
-                </motion.div>
+                </Reorder.Item>
               ))}
             </AnimatePresence>
-          </div>
+          </Reorder.Group>
         </div>
       )}
 
@@ -145,15 +158,29 @@ const sortedTasks = [...filteredTasks].sort((a, b) => {
             <ApperIcon name="CheckCircle" className="w-5 h-5 text-green-500" />
             Completed Tasks ({completedTasks.length})
           </h3>
-          <div className="space-y-4">
+<Reorder.Group 
+            axis="y" 
+            values={completedTasks} 
+            onReorder={(reorderedTasks) => onReorderTasks(reorderedTasks, 'completed')}
+            className="space-y-4"
+          >
             <AnimatePresence>
               {completedTasks.map((task) => (
-                <motion.div
+                <Reorder.Item
                   key={task.Id}
+                  value={task}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
                   transition={{ duration: 0.2 }}
+                  whileDrag={{ 
+                    scale: 1.05, 
+                    zIndex: 50,
+                    cursor: 'grabbing',
+                    boxShadow: '0 8px 25px rgba(0, 0, 0, 0.15)'
+                  }}
+                  dragConstraints={{ top: 0, bottom: 0 }}
+                  className="drag-item"
                 >
                   <TaskCard
                     task={task}
@@ -161,10 +188,10 @@ const sortedTasks = [...filteredTasks].sort((a, b) => {
                     onEdit={onEdit}
                     onDelete={onDelete}
                   />
-                </motion.div>
+                </Reorder.Item>
               ))}
             </AnimatePresence>
-          </div>
+          </Reorder.Group>
         </div>
       )}
     </div>

@@ -81,6 +81,22 @@ export const useTasks = () => {
       toast.error("Failed to update task");
       throw err;
     }
+};
+
+  const reorderTasks = async (reorderedTasks, section) => {
+    try {
+      await taskService.reorderTasks(reorderedTasks);
+      setTasks(prev => {
+        const otherTasks = section === 'active' 
+          ? prev.filter(task => task.completed)
+          : prev.filter(task => !task.completed);
+        return [...reorderedTasks, ...otherTasks];
+      });
+      toast.success("Tasks reordered successfully!");
+    } catch (err) {
+      toast.error("Failed to reorder tasks");
+      throw err;
+    }
   };
 
   const createCategory = async (categoryData) => {
@@ -99,7 +115,7 @@ export const useTasks = () => {
     loadTasks();
   }, []);
 
-  return {
+return {
     tasks,
     categories,
     loading,
@@ -108,6 +124,7 @@ export const useTasks = () => {
     updateTask,
     deleteTask,
     toggleTaskComplete,
+    reorderTasks,
     createCategory,
     refetch: loadTasks
   };
